@@ -97,8 +97,10 @@ def break_block(blocks,fis_penguin,lim=3):
         q=que.pop(0)
         for s in to4:
             pl=[q[0]+s[0],q[1]+s[1]]#上下左右
+            checking("      part:look for neighbor",{"pl":pl})
             try:
                 b=blocks[pl[0]][pl[1]]  #試験体
+                checking("      part:neighbor's num",{"b":b})
             except IndexError:
                 continue
             if b==keynum:
