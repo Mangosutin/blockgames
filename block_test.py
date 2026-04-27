@@ -9,13 +9,13 @@ import time
 def num_makein_range(num):
     """0~1を受け取ってminとmaxの間にはめ込む。(整数)"""
     return int(num*(maxn-minn+1)+minn)
-dx=5
-dy=7
+mx=5
+my=7
 seed_num=4
 maxn=3;minn=1#blocks num range
 random.seed(seed_num)
 #it is more easly than that 1st dimension is y line for falling process
-blocks=[[num_makein_range(random.random()) for j in range(dy)]for i in range(dx)]
+blocks=[[num_makein_range(random.random()) for j in range(my)]for i in range(mx)]
 """
 seed_num=4
 y
@@ -27,6 +27,7 @@ y
 
 0  1 2 3 4 5 x
 """
+turnednum=0
 game_ov=False
 to4=[
     [0,1],
@@ -97,9 +98,6 @@ def show_blocks(blocks,justrow=False):
         print(pri)
         checking("FIN Function:show_blocks")
         return pri
-show_blocks(blocks)
-blocks=turn90(blocks)
-show_blocks(blocks)
 def break_block(blocks,fis_penguin,lim=3):
     sx=len(blocks)
     sy=len(blocks[0])
@@ -117,14 +115,11 @@ def break_block(blocks,fis_penguin,lim=3):
     que=[fis_penguin[0:2]]#i will kill the list
     did=[fis_penguin[0:2]]#killed and will broaken orz
     while len(que)>0:
-        checking("      part:in While fis",{"q":que})
         q=que.pop(0)
         for s in to4:
             pl=[q[0]+s[0],q[1]+s[1]]#上下左右
-            checking("      part:look for neighbor",{"pl":pl})
             try:
                 b=blocks[pl[0]][pl[1]]  #試験体
-                checking("      part:neighbor's num",{"b":b})
             except IndexError:
                 continue
             if b==keynum:
@@ -176,7 +171,12 @@ while not game_ov:
     delplace=[input("X位置:"),input("Y位置:")]
     dx=int(delplace[0])-1
     dy=int(delplace[1])-1
-    blocks=break_block(blocks,[dx,dy,blocks[dx][dy]])
+    for t in to4:
+        tx=dx+t[0]
+        ty=dy+t[1]
+        blocks=break_block(blocks,[tx,ty,blocks[tx][ty]])
+        blocks=turn90(blocks)
+        show_blocks(blocks)
     """
     ####juts del the pushed block####
     deln=blocks[dx].pop(dy)
