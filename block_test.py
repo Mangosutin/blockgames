@@ -118,10 +118,10 @@ def break_block(blocks,fis_penguin,lim=3):
         q=que.pop(0)
         for s in to4:
             pl=[q[0]+s[0],q[1]+s[1]]#上下左右
-            try:
-                b=blocks[pl[0]][pl[1]]  #試験体
-            except IndexError:
+            if pl[0]<0 or pl[1]<0 or pl[0]>=sx or pl[1]>=sy:
                 continue
+            else:
+                b=blocks[pl[0]][pl[1]]  #試験体
             if b==keynum:
                 if not pl in did:
                     did.append(pl)
@@ -144,7 +144,7 @@ def break_block(blocks,fis_penguin,lim=3):
         low=xydid[lowdx]
         checking("      Part:I will sort each low",{"low":low})
         ok=0
-        while ok<sy and len(low)>0:
+        while ok<sy and len(low)>1:
             b=low[0]
             for adx in range(1,len(low)):
                 a=low[adx]
