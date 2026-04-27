@@ -9,13 +9,13 @@ import time
 def num_makein_range(num):
     """0~1を受け取ってminとmaxの間にはめ込む。(整数)"""
     return int(num*(maxn-minn+1)+minn)
-sx=5
-sy=5
+dx=5
+dy=7
 seed_num=4
-maxn=9;minn=1#blocks num range
+maxn=3;minn=1#blocks num range
 random.seed(seed_num)
 #it is more easly than that 1st dimension is y line for falling process
-blocks=[[num_makein_range(random.random()) for j in range(sy)]for i in range(sx)]
+blocks=[[num_makein_range(random.random()) for j in range(dy)]for i in range(dx)]
 """
 seed_num=4
 y
@@ -33,7 +33,7 @@ to4=[
     [0,-1],
     [1,0],
     [-1,0]]
-def checking(text,hensu={"":""},sltime=.1):#かさばるのが嫌だ
+def checking(text,hensu={"":""},sltime=0):#かさばるのが嫌だ
     text="|"+text+"_"
     check=True#debug printing bool
     if check:
@@ -48,8 +48,27 @@ def checking(text,hensu={"":""},sltime=.1):#かさばるのが嫌だ
                 print("|",k,":",hensu[k])
             print("|_____")
     time.sleep(sltime)
+def turn90(blocks,left=False):
+    """blocksを90度回転させる。left=Trueなら左回転、Falseなら右回転"""
+    checking("Function:turn90")
+    sy=len(blocks[0])
+    sx=len(blocks)
+    bl_turn90=[]
+    for _ in range(sy):
+        bl_turn90.append([0]*sx)
+    for lowdx in range(sx):
+        for linedx in range(sy):
+            if left:
+                bl_turn90[linedx][sx-1-lowdx]=blocks[lowdx][linedx]
+            else:
+                bl_turn90[sy-1-linedx][lowdx]=blocks[lowdx][linedx] 
+
+    return bl_turn90
+
 def show_blocks(blocks,justrow=False):
     checking("Function:show_blocks")
+    sy=len(blocks[0])
+    sx=len(blocks)
     if justrow:
         for low in blocks:
             print(low)  
@@ -78,7 +97,12 @@ def show_blocks(blocks,justrow=False):
         print(pri)
         checking("FIN Function:show_blocks")
         return pri
+show_blocks(blocks)
+blocks=turn90(blocks)
+show_blocks(blocks)
 def break_block(blocks,fis_penguin,lim=3):
+    sx=len(blocks)
+    sy=len(blocks[0])
     ###########
     """___break_blockは、
     blocks(すべてのブロックの配置),
@@ -107,7 +131,7 @@ def break_block(blocks,fis_penguin,lim=3):
                 if not pl in did:
                     did.append(pl)
                     que.append(pl)
-    if len(did)+1<lim:
+    if len(did)<lim:
         return blocks
     """列ごとに処理するためにdidを列ごとに整理する。"""
     xydid={}
@@ -142,7 +166,7 @@ def break_block(blocks,fis_penguin,lim=3):
     for x in range(sx):
         for y in xydid[x]:
             blocks[x].pop(y)
-            blocks[x].append(num_makein_range(0))
+            blocks[x].append(num_makein_range(random.random()))
     return blocks
 
 
