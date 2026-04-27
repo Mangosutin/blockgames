@@ -9,6 +9,7 @@ import time
 def num_makein_range(num):
     """0~1を受け取ってminとmaxの間にはめ込む。(整数)"""
     return int(num*(maxn-minn+1)+minn)
+check=True if input("check?")=="y" else False
 mx=5
 my=7
 seed_num=4
@@ -36,7 +37,6 @@ to4=[
     [-1,0]]
 def checking(text,hensu={"":""},sltime=0):#かさばるのが嫌だ
     text="|"+text+"_"
-    check=True#debug printing bool
     if check:
         keys=list(hensu.keys())
         """変数の中身を確認したければdictで渡してくれれば見れるで👍"""
@@ -168,15 +168,29 @@ def break_block(blocks,fis_penguin,lim=3):
 
 show_blocks(blocks)
 while not game_ov:
-    delplace=[input("X位置:"),input("Y位置:")]
-    dx=int(delplace[0])-1
-    dy=int(delplace[1])-1
+    dx=max([mx,my])+1
+    dy=max([mx,my])+1
+    while dx>=mx or dy>=my:
+        delplace=[input("X位置:"),input("Y位置:")]
+        if (delplace[0])=="check":
+            check=True if input("check?")=="y" else False
+            delplace=[input("X位置:"),input("Y位置:")]
+        dx=int(delplace[0])-1
+        dy=int(delplace[1])-1
+        if dx>=mx or dy>=my:
+            print("again plz")
     for t in to4:
-        tx=dx+t[0]
-        ty=dy+t[1]
+        x=len(blocks)-dy
+        y=len(blocks[0])-dx
+        tx=x+t[0]
+        ty=y+t[1]
+        dy=y
+        dx=x
+        if tx<0 or ty<0 or tx>=mx or ty>=my:
+            continue
         blocks=break_block(blocks,[tx,ty,blocks[tx][ty]])
-        blocks=turn90(blocks)
         show_blocks(blocks)
+        blocks=turn90(blocks)
     """
     ####juts del the pushed block####
     deln=blocks[dx].pop(dy)
