@@ -13,10 +13,9 @@ check=True if input("check?")=="y" else False
 mx=5
 my=7
 seed_num=4
-maxn=3;minn=1#blocks num range
+maxn=4;minn=0#blocks num range
 random.seed(seed_num)
 #it is more easly than that 1st dimension is y line for falling process
-blocks=[[num_makein_range(random.random()) for j in range(my)]for i in range(mx)]
 """
 seed_num=4
 y
@@ -30,6 +29,8 @@ y
 """
 turnednum=0
 game_ov=False
+blocklib=list("▧▤▦▩▥")
+blocks=[[blocklib[num_makein_range(random.random())] for j in range(my)]for i in range(mx)]
 to4=[
     [0,1],
     [0,-1],
@@ -161,10 +162,19 @@ def break_block(blocks,fis_penguin,lim=3):
     for x in range(sx):
         for y in xydid[x]:
             blocks[x].pop(y)
-            blocks[x].append(num_makein_range(random.random()))
+            blocks[x].append(".")
     return blocks
-
-
+def tikanENP(blocks,taikiblock):
+    for lowdx in range(len(blocks)):
+        for linedx in range(len(blocks[0])):
+            if blocks[lowdx][linedx]==".":
+                blocks[lowdx][linedx]=taikiblock[0]
+                taikiblock=taikiblock[1:]
+                taikiblock+=blocklib[num_makein_range(random.random())]
+    return blocks,taikiblock
+taikiblock=""
+for i in range(20):
+    taikiblock+=blocklib[num_makein_range(random.random())]
 
 show_blocks(blocks)
 while not game_ov:
@@ -180,20 +190,19 @@ while not game_ov:
         if dx>=mx or dy>=my:
             print("again plz")
     for t in to4:
-        x=len(blocks)-dy
-        y=len(blocks[0])-dx
-        tx=x+t[0]
-        ty=y+t[1]
-        dy=y
-        dx=x
-        if tx<0 or ty<0 or tx>=mx or ty>=my:
+        tx=dx+t[0]
+        ty=dy+t[1]
+        if tx<0 or ty<0 or tx>=len(blocks) or ty>=len(blocks[0]):
             continue
         blocks=break_block(blocks,[tx,ty,blocks[tx][ty]])
         show_blocks(blocks)
-        blocks=turn90(blocks)
+        
+        blocks,taikiblock=tikanENP(blocks,taikiblock)
+    blocks=turn90(blocks)
     """
     ####juts del the pushed block####
     deln=blocks[dx].pop(dy)
     blocks[dx].append(num_makein_range(random.random()))"""
 
     show_blocks(blocks)
+    print(taikiblock)
