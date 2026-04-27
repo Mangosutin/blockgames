@@ -91,7 +91,7 @@ def break_block(blocks,fis_penguin,lim=3):
     """first_penguinの周囲の群を検出する。"""
     keynum=fis_penguin[2]#break blocks that is same num this
     que=[fis_penguin[0:2]]#i will kill the list
-    did=[]#killed and will broaken orz
+    did=[fis_penguin[0:2]]#killed and will broaken orz
     while len(que)>0:
         checking("      part:in While fis",{"q":que})
         q=que.pop(0)
@@ -130,7 +130,7 @@ def break_block(blocks,fis_penguin,lim=3):
             for adx in range(1,len(low)):
                 a=low[adx]
                 
-                if a<b:
+                if a>b:
                     low[adx]=b
                     low[adx-1]=a
                 else:
